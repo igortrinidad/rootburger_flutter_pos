@@ -1,10 +1,21 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
-import '../home/home_page.dart';
 
 import 'login_bloc.dart';
 
-class LoginPage extends StatelessWidget {
+
+class LoginPage extends StatefulWidget{
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+
+class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void initState(){
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context){
@@ -78,18 +89,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: snapshot.hasData
                     ? () async {
 
-                      try {// This could display a loading spinner of sorts.
-                        await loginBloc.makeLogin();
-                        Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) => HomePage()));
-                      } catch (e) {
-                          Scaffold.of(context).showSnackBar(
-                              SnackBar(content: Text("Falha ao Entrar!"),
-                                backgroundColor: Colors.redAccent,
-                                duration: Duration(seconds: 2),
-                              )
-                          );
-                      }  
+                      await loginBloc.makeLogin();
                     }
                     : null,
                   child: Text("Entrar"),

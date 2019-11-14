@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:rootburger_flutter_pos/helpers/custom_dio.dart';
+import 'package:rootburger_flutter_pos/home/home_page.dart';
 import 'package:rootburger_flutter_pos/models/user_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'login_validator.dart';
@@ -57,6 +58,7 @@ class LoginBloc extends Object with LoginValidator implements BlocBase {
       _userIsLogged.sink.add(true);
       _userController.sink.add(UserModel.fromJson(response.data["user"]));
       print("<<<<<< USER WAS LOGGED >>>>>>");
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
         
     } else {
       _userIsLogged.sink.add(false);
