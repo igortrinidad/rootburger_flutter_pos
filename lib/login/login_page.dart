@@ -1,5 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:rootburger_flutter_pos/helpers/scaffold_service.dart';
 
 import 'login_bloc.dart';
 
@@ -22,7 +24,10 @@ class _LoginPageState extends State<LoginPage> {
 
     final loginBloc = BlocProvider.getBloc<LoginBloc>();
 
+    GetIt locator = GetIt.instance;
+
     return Scaffold(
+      key: locator<ScaffoldService>().scaffoldKey,
       appBar: AppBar(
         title: Text("Login"),
         centerTitle: true,
@@ -90,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     ? () async {
 
                       await loginBloc.makeLogin();
+                      
                     }
                     : null,
                   child: Text("Entrar"),

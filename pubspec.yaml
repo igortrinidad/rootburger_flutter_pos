@@ -27,6 +27,8 @@ dependencies:
   shared_preferences: ^0.5.4+5
   rxdart: ^0.22.6
   dio: ^3.0.4
+  searchable_dropdown: ^1.1.0
+  get_it: ^3.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,17 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
-import 'login/login_page.dart';
+import 'package:rootburger_flutter_pos/helpers/navigation_service.dart';
+import 'package:rootburger_flutter_pos/helpers/scaffold_service.dart';
+import 'helpers/router.dart';
 import 'login/login_bloc.dart';
+import 'package:get_it/get_it.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  
+  setupLocator();
+  runApp(MyApp());
+
+}
 
 class MyApp extends StatefulWidget{
   @override
@@ -20,15 +28,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
+    GetIt locator = GetIt.instance;
+
     return BlocProvider(
-      dependencies: [
-        
-      ],
       blocs: [
         Bloc( (i) => LoginBloc(context)),
       ],
       child: MaterialApp(
-        home: LoginPage(),
+        navigatorKey: locator<NavigationService>().navigatorKey,
+        onGenerateRoute: Router.generateRoute,
+        initialRoute: "/",
         theme: ThemeData(
           primarySwatch: Colors.teal,
         ),
@@ -37,4 +47,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+}
+
+void setupLocator() {
+
+  GetIt locator = GetIt.instance;
+  locator.registerLazySingleton(() => NavigationService());
+  locator.registerLazySingleton(() => ScaffoldService());
+  
 }

@@ -1,5 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:rootburger_flutter_pos/helpers/navigation_service.dart';
 import 'package:rootburger_flutter_pos/login/login_bloc.dart';
 import 'package:rootburger_flutter_pos/login/login_page.dart';
 import 'package:rootburger_flutter_pos/models/user_model.dart';
@@ -10,11 +12,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context){
 
     final loginBloc = BlocProvider.getBloc<LoginBloc>();
+    GetIt locator = GetIt.instance;
 
     return StreamBuilder<UserModel>(
       stream: loginBloc.getUserLogged,
       builder: (context, snapshot) {
         return !snapshot.hasData ? Container() : Container(
+          padding: EdgeInsets.all(16),
           color: Colors.pink,
           child: Center(
             child: Column(
@@ -41,7 +45,32 @@ class HomePage extends StatelessWidget {
                       } 
                     }
                   )
-                )
+                ),
+
+                SizedBox(height: 30.0),
+
+                SizedBox(
+                  width: double.infinity, // match_parent
+                  child: RaisedButton(
+                    color: Colors.yellow,
+                    child: Text("Login", style: TextStyle(color: Colors.black87, fontSize: 20.0)),
+                    onPressed: () {
+                      locator<NavigationService>().navigateTo('/login');
+                    },
+                  )
+                ),
+
+                SizedBox(
+                  width: double.infinity, // match_parent
+                  child: RaisedButton(
+                    color: Colors.yellow,
+                    child: Text("Settings", style: TextStyle(color: Colors.black87, fontSize: 20.0)),
+                    onPressed: () {
+                      locator<NavigationService>().navigateTo('/settings');
+                    },
+                  )
+                ),
+
 
               ]
             

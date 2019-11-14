@@ -2,13 +2,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:get_it/get_it.dart';
 import 'package:rootburger_flutter_pos/helpers/custom_dio.dart';
+import 'package:rootburger_flutter_pos/helpers/navigation_service.dart';
+import 'package:rootburger_flutter_pos/helpers/scaffold_service.dart';
 import 'package:rootburger_flutter_pos/home/home_page.dart';
 import 'package:rootburger_flutter_pos/models/user_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'login_validator.dart';
 
 class LoginBloc extends Object with LoginValidator implements BlocBase {
+
+  GetIt locator = GetIt.instance;
 
   final _isLoadingController = BehaviorSubject<bool>.seeded(false);
   Stream<bool> get getIsLoading => _isLoadingController.stream;
@@ -46,24 +51,34 @@ class LoginBloc extends Object with LoginValidator implements BlocBase {
   }
 
   Future<void> makeLogin() async {
-  
+    
+    print(_emailController.value);
+    
     var customDio = CustomDio();
-    //Response response = await customDio.getClient().post("/api/auth/login", data: {"login": _emailController.value, "password": _passwordController.value});
-    Response response = await customDio.getClient().post("/api/auth/login", data: {"login": "igorlucast@hotmail.com", "password": "password"});
+    
+    try {
 
-    _isLoadingController.sink.add(false);
-
-    if(response.statusCode == 200) {
-      
+      Response response = await customDio.getClient().post("/api/auth/login", data: {"login": _emailController.value, "password": _passwordController.value});
       _userIsLogged.sink.add(true);
       _userController.sink.add(UserModel.fromJson(response.data["user"]));
       print("<<<<<< USER WAS LOGGED >>>>>>");
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
-        
-    } else {
+      locator<NavigationService>().navigateTo('/');
+
+    } catch (e) {
+
+      print(e);
+      _isLoadingController.sink.add(false);
       _userIsLogged.sink.add(false);
       _userController.sink.add(UserModel());
       print("<<<<<< USER WASNT! LOGGED >>>>>>");
+
+      locator<ScaffoldService>().scaffoldKey.currentState.showSnackBar(
+          SnackBar(content: Text("Falha ao Entrar!"),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          )
+      );
+        
     }
     
   }
